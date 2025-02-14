@@ -9,4 +9,8 @@ app.register(cors, {
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
 })
 
-app.register(productRoutes, { prefix: '/product' })
+app.get("/", async () => {
+  return { message: "Hello!" };
+});
+
+app.register(productRoutes, { prefix: '/products' })

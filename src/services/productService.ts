@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
-export const createProduct = async (data: {
+export const registerNewProduct = async (data: {
   barcode: string
   brand: string
   name: string
@@ -22,6 +22,18 @@ export const createProduct = async (data: {
 
   return prisma.product.create({ data })
 }
+
+
+export async function getAllProducts() {
+  const products = await prisma.product.findMany()// Busca todos os produtos cadastrados no banco
+  
+  return products.map(product => ({
+    ...product,
+    price: Number(product.price).toFixed(2), // Converte e mantém 2 casas decimais
+  }))
+}
+
+
 //alterar para poder buscar o produto por barcode, nome, marca, tipo ou descrição
 export const findProductByBarcode = async (barcode: string) => {
   return prisma.product.findUnique({ where: { barcode } })

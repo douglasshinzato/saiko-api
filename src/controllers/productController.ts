@@ -6,13 +6,13 @@ import {
   updateProductSchema,
 } from '../schemas/productSchemas'
 
-export async function createProduct(
+export async function registerNewProduct(
   request: FastifyRequest,
   reply: FastifyReply
 ) {
   try {
     const data = createProductSchema.parse(request.body)
-    const product = await productService.createProduct(data)
+    const product = await productService.registerNewProduct(data)
     reply.status(201).send(product)
   } catch (error) {
     if (error instanceof Error && error.message === 'Produto já cadastrado') {
@@ -27,6 +27,23 @@ export async function createProduct(
       // Caso o erro não seja uma instância de Error, retorna um erro genérico
       reply.status(500).send({ error: 'An unexpected error occurred' })
     }
+  }
+}
+
+export async function getAllProducts(
+  request: FastifyRequest,
+  reply: FastifyReply
+) {
+  try {
+    const products = await productService.getAllProducts() // Busca todos os produtos no banco
+
+    if (products.length === 0) {
+      return reply.status(404).send({ message: 'Nenhum produto encontrado' })
+    }
+
+    reply.send(products)
+  } catch (error) {
+    reply.status(500).send({ error: 'Erro interno do servidor' })
   }
 }
 
