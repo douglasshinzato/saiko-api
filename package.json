@@ -1,0 +1,28 @@
+{
+  "name": "saiko-api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "start": "node build/server.js",
+    "build": "tsup src --out-dir build"
+  },
+  "keywords": [],
+  "author": "Douglas Shinzato",
+  "license": "ISC",
+  "description": "Shop storage system",
+  "devDependencies": {
+    "@types/node": "22.9.1",
+    "prisma": "6.3.1",
+    "tsup": "8.3.5",
+    "tsx": "4.19.2",
+    "typescript": "5.6.3"
+  },
+  "dependencies": {
+    "@fastify/cors": "10.0.1",
+    "@prisma/client": "5.22.0",
+    "dotenv": "16.4.5",
+    "fastify": "5.1.0",
+    "zod": "3.23.8"
+  }
+}
