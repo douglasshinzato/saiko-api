@@ -35,13 +35,10 @@ export async function getAllProducts(
   reply: FastifyReply
 ) {
   try {
-    const products = await productService.getAllProducts() // Busca todos os produtos no banco
+    const products = await productService.getAllProducts()
 
-    if (products.length === 0) {
-      return reply.status(404).send({ message: 'Nenhum produto encontrado' })
-    }
-
-    reply.send(products)
+    // Em vez de 404, retorna um array vazio com status 200
+    reply.status(200).send(products)
   } catch (error) {
     reply.status(500).send({ error: 'Erro interno do servidor' })
   }

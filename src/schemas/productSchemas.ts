@@ -8,10 +8,6 @@ export const createProductSchema = z.object({
   category: z.string().min(1, { message: 'Category is required' }),
   description: z.string().optional(),
   price: z.number().positive({ message: 'Price must be a positive number' }),
-  stock: z
-    .number()
-    .positive({ message: 'Stock must be a positive number' })
-    .optional(),
 })
 
 export const updateProductSchema = z.object({
@@ -21,9 +17,5 @@ export const updateProductSchema = z.object({
   price: z
     .number()
     .positive({ message: 'Price must be a positive number' })
-    .optional(),
-  stock: z
-    .number()
-    .positive({ message: 'Stock must be a positive number' })
     .optional(),
 })

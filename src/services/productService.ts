@@ -10,7 +10,6 @@ export const registerNewProduct = async (data: {
   category: string
   description?: string
   price: number
-  stock?: number
 }) => {
   const existingProduct = await prisma.products.findUnique({
     where: { barcode: data.barcode },
@@ -44,7 +43,6 @@ export const updateProduct = async (
     name?: string
     description?: string
     price?: number
-    stock?: number
   }
 ) => {
   return prisma.products.update({

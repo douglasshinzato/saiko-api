@@ -15,7 +15,6 @@ model Products {
   category    String
   description String?
   price       Decimal
-  stock       Float?
   createAt    DateTime @default(now())
   updateAt    DateTime @updatedAt
 }

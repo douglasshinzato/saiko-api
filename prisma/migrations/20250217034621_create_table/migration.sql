@@ -1,5 +1,5 @@
 -- CreateTable
-CREATE TABLE "Product" (
+CREATE TABLE "Products" (
     "id" TEXT NOT NULL,
     "barcode" TEXT NOT NULL,
     "brand" TEXT NOT NULL,
@@ -11,8 +11,8 @@ CREATE TABLE "Product" (
     "createAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updateAt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "Product_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Products_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Product_barcode_key" ON "Product"("barcode");
+CREATE UNIQUE INDEX "Products_barcode_key" ON "Products"("barcode");
