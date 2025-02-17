@@ -12,7 +12,7 @@ export const registerNewProduct = async (data: {
   price: number
   stock?: number
 }) => {
-  const existingProduct = await prisma.product.findUnique({
+  const existingProduct = await prisma.products.findUnique({
     where: { barcode: data.barcode },
   })
 
@@ -20,23 +20,21 @@ export const registerNewProduct = async (data: {
     throw new Error('Produto já cadastrado')
   }
 
-  return prisma.product.create({ data })
+  return prisma.products.create({ data })
 }
 
-
 export async function getAllProducts() {
-  const products = await prisma.product.findMany()// Busca todos os produtos cadastrados no banco
-  
-  return products.map(product => ({
+  const products = await prisma.products.findMany() // Busca todos os produtos cadastrados no banco
+
+  return products.map((product) => ({
     ...product,
     price: Number(product.price).toFixed(2), // Converte e mantém 2 casas decimais
   }))
 }
 
-
 //alterar para poder buscar o produto por barcode, nome, marca, tipo ou descrição
 export const findProductByBarcode = async (barcode: string) => {
-  return prisma.product.findUnique({ where: { barcode } })
+  return prisma.products.findUnique({ where: { barcode } })
 }
 //para atualizar o produto, as propriedades devem ser opcionais
 export const updateProduct = async (
@@ -49,12 +47,12 @@ export const updateProduct = async (
     stock?: number
   }
 ) => {
-  return prisma.product.update({
+  return prisma.products.update({
     where: { barcode },
     data,
   })
 }
 
 export const deleteProduct = async (barcode: string) => {
-  return prisma.product.delete({ where: { barcode } })
+  return prisma.products.delete({ where: { barcode } })
 }
