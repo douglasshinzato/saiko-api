@@ -7,7 +7,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Product {
+model Products {
   id          String   @id @default(uuid())
   barcode     String   @unique
   brand       String
