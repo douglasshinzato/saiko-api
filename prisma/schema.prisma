@@ -9,9 +9,8 @@ datasource db {
 
 model Products {
   id          String   @id @default(uuid())
-  barcode     String?  @unique
   brand       String
-  name        String
+  name        String   @unique
   category    String
   description String?
   price       Decimal
