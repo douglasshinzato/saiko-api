@@ -5,7 +5,7 @@ import productRoutes from './routes/productRoutes'
 export const app = fastify()
 
 app.register(cors, {
-  origin: '*',
+  origin: ['http://localhost:3000', 'https://saiko-front-end.vercel.app'],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
 })
 
