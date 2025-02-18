@@ -7,7 +7,7 @@
     "start": "node build/server.js",
     "build": "tsup src --out-dir build",
     "migrate": "prisma migrate deploy",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate && prisma migrate deploy"
   },
   "keywords": [],
   "author": "Douglas Shinzato",
