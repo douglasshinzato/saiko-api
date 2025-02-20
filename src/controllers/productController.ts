@@ -5,26 +5,42 @@ import {
   createProductSchema,
   updateProductSchema,
 } from '../schemas/productSchemas'
+import { ZodError } from 'zod'
 
 export async function registerNewProduct(
   request: FastifyRequest,
   reply: FastifyReply
 ) {
   try {
+    // ✅ Valida os dados com Zod
     const data = createProductSchema.parse(request.body)
+
+    // ✅ Chama o serviço para registrar o produto
     const product = await productService.registerNewProduct(data)
+
     reply.status(201).send(product)
   } catch (error) {
-    if (error instanceof Error) {
-      // Retorna um status 409 (Conflict) caso o produto já exista
-      reply.status(409).send({ error: 'Produto já cadastrado' })
-    } else if (error instanceof Error) {
-      // Para outros erros, retorna 400 ou 500 com a mensagem do erro
-      reply.status(400).send({ error: error.message })
-    } else {
-      // Caso o erro não seja uma instância de Error, retorna um erro genérico
-      reply.status(500).send({ error: 'An unexpected error occurred' })
+    if (error instanceof ZodError) {
+      // ✅ Retorna erro 400 com detalhes da validação do Zod
+      return reply.status(400).send({
+        error: 'Erro de validação',
+        details: error.errors.map((err) => ({
+          field: err.path.join('.'),
+          message: err.message,
+        })),
+      })
     }
+
+    if (
+      error instanceof Error &&
+      error.message.includes('Produto já cadastrado')
+    ) {
+      // ✅ Retorna erro 409 para produto duplicado
+      return reply.status(409).send({ error: 'Produto já cadastrado' })
+    }
+
+    // ✅ Qualquer outro erro inesperado
+    return reply.status(500).send({ error: 'Erro interno do servidor' })
   }
 }
 
