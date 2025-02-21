@@ -3,14 +3,14 @@ import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
-export const registerNewProduct = async (data: {
+export async function registerNewProduct(data: {
   // barcode: string
   brand: string
   name: string
   category: string
   description?: string
   price: number
-}) => {
+}) {
   const existingProduct = await prisma.products.findUnique({
     where: { name: data.name },
   })
@@ -31,26 +31,26 @@ export async function getAllProducts() {
   }))
 }
 
-//alterar para poder buscar o produto por barcode, nome, marca, tipo ou descrição
-// export const findProductByBarcode = async (barcode: string) => {
-//   return prisma.products.findUnique({ where: { barcode } })
-// }
-//para atualizar o produto, as propriedades devem ser opcionais
-// export const updateProduct = async (
-//   barcode: string,
-//   data: {
-//     brand?: string
-//     name?: string
-//     description?: string
-//     price?: number
-//   }
-// ) => {
-//   return prisma.products.update({
-//     where: { barcode },
-//     data,
-//   })
-// }
+export async function updateProduct(
+  id: string,
+  data: {
+    brand?: string
+    name?: string
+    category?: string
+    description?: string
+    price?: number
+  }
+) {
+  const existingProduct = await prisma.products.findUnique({
+    where: { id },
+  })
 
-// export const deleteProduct = async (barcode: string) => {
-//   return prisma.products.delete({ where: { barcode } })
-// }
+  if (!existingProduct) {
+    throw new Error('Produto não encontrado')
+  }
+
+  return prisma.products.update({
+    where: { id },
+    data,
+  })
+}

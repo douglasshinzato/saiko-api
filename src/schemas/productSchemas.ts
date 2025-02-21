@@ -32,11 +32,26 @@ export const createProductSchema = z.object({
 })
 
 export const updateProductSchema = z.object({
-  brand: z.string().optional(),
-  name: z.string().min(1, { message: 'Name is required' }).optional(),
+  barcode: z.string().optional(),
+  brand: z.string().min(1, 'A marca é obrigatória').optional(),
+  name: z.string().min(1, 'O nome do produto é obrigatório').optional(),
+  category: z.string().min(1, 'A categoria é obrigatória').optional(),
   description: z.string().optional(),
   price: z
-    .number()
-    .positive({ message: 'Price must be a positive number' })
+    .string()
+    .refine(
+      (value) => {
+        return /^(?:\d{1,3}(\.\d{3})*|\d+)(,\d{2})?$/.test(value)
+      },
+      {
+        message:
+          'Formato de preço inválido. (digite por exemplo: "1000", "1.000", "1000,00" ou "1.000,00")',
+      }
+    )
+    .transform((value) => {
+      let normalized = value.replace(/\.(?=\d{3}(?:,|$))/g, '')
+      normalized = normalized.replace(',', '.')
+      return parseFloat(normalized)
+    })
     .optional(),
 })

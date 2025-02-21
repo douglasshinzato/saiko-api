@@ -58,47 +58,42 @@ export async function getAllProducts(
   }
 }
 
-// export async function getProductByBarcode(
-//   request: FastifyRequest,
-//   reply: FastifyReply
-// ) {
-//   try {
-//     const { barcode } = request.params as { barcode: string }
-//     const product = await productService.findProductByBarcode(barcode)
-//     if (!product) {
-//       return reply.status(404).send({ message: 'Produto não cadastrado' })
-//     }
-//     reply.send(product)
-//   } catch (error) {
-//     reply.status(500).send({ error: 'Erro interno do servidor' })
-//   }
-// }
+export async function updateProduct(
+  request: FastifyRequest,
+  reply: FastifyReply
+) {
+  try {
+    // ✅ Obtém o ID do produto a partir dos parâmetros da URL
+    const { id } = request.params as { id: string }
 
-// export async function updateProduct(
-//   request: FastifyRequest,
-//   reply: FastifyReply
-// ) {
-//   try {
-//     const { barcode } = request.params as { barcode: string }
-//     const data = updateProductSchema.parse(request.body)
-//     const product = await productService.updateProduct(barcode, data)
-//     reply.send(product)
-//   } catch (error) {
-//     reply
-//       .status(400)
-//       .send({ error: error instanceof Error ? error.message : 'Invalid data' })
-//   }
-// }
+    // ✅ Valida os dados com Zod
+    const data = updateProductSchema.parse(request.body)
 
-// export async function deleteProduct(
-//   request: FastifyRequest,
-//   reply: FastifyReply
-// ) {
-//   try {
-//     const { barcode } = request.params as { barcode: string }
-//     await productService.deleteProduct(barcode)
-//     reply.status(204).send({ message: 'Produto removido com sucesso' })
-//   } catch (error) {
-//     reply.status(500).send({ error: 'An unexpected error occurred' })
-//   }
-// }
+    // ✅ Chama o serviço para atualizar o produto
+    const product = await productService.updateProduct(id, data)
+
+    reply.status(200).send(product)
+  } catch (error) {
+    if (error instanceof ZodError) {
+      // ✅ Retorna erro 400 com detalhes da validação do Zod
+      return reply.status(400).send({
+        error: 'Erro de validação',
+        details: error.errors.map((err) => ({
+          field: err.path.join('.'),
+          message: err.message,
+        })),
+      })
+    }
+
+    if (
+      error instanceof Error &&
+      error.message.includes('Produto não encontrado')
+    ) {
+      // ✅ Retorna erro 404 se o produto não for encontrado
+      return reply.status(404).send({ error: 'Produto não encontrado' })
+    }
+
+    // ✅ Qualquer outro erro inesperado
+    return reply.status(500).send({ error: 'Erro interno do servidor' })
+  }
+}
