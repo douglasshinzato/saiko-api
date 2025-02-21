@@ -58,6 +58,28 @@ export async function getAllProducts(
   }
 }
 
+export async function getProductById(
+  request: FastifyRequest<{ Params: { id: string } }>,
+  reply: FastifyReply
+) {
+  try {
+    const { id } = request.params
+
+    const product = await productService.getProductById(id)
+
+    reply.status(200).send(product)
+  } catch (error) {
+    if (
+      error instanceof Error &&
+      error.message.includes('Produto não encontrado')
+    ) {
+      return reply.status(404).send({ error: 'Produto não encontrado' })
+    }
+
+    reply.status(500).send({ error: 'Erro interno do servidor' })
+  }
+}
+
 export async function updateProduct(
   request: FastifyRequest,
   reply: FastifyReply
