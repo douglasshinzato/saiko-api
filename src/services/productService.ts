@@ -27,7 +27,7 @@ export async function getAllProducts() {
 
   return products.map((product) => ({
     ...product,
-    price: Number(product.price).toFixed(2), // Converte e mantém 2 casas decimais
+    price: Number(product.price).toFixed(2), // Converte para string e mantém 2 casas decimais
   }))
 }
 
@@ -40,7 +40,10 @@ export async function getProductById(id: string) {
     throw new Error('Produto não encontrado')
   }
 
-  return product
+  return {
+    ...product,
+    price: product.price.toFixed(2).replace('.', ','), // Converte para string
+  }
 }
 
 export async function updateProduct(

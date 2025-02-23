@@ -31,6 +31,15 @@ export const createProductSchema = z.object({
     }),
 })
 
+export const getProductByIdSchema = z.object({
+  barcode: z.string().optional(),
+  brand: z.string(),
+  name: z.string(),
+  category: z.string(),
+  description: z.string(),
+  price: z.string(),
+})
+
 export const updateProductSchema = z.object({
   barcode: z.string().optional(),
   brand: z.string().min(1, 'A marca é obrigatória').optional(),
